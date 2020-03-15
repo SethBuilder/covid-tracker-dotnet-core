@@ -1,59 +1,89 @@
 import React, { Component } from 'react';
-
+import ReactCountryFlag from "react-country-flag"
+import CountrySelect from "./CountrySelect";
 export class FetchData extends Component {
   static displayName = FetchData.name;
 
   constructor(props) {
     super(props);
-    this.state = { forecasts: [], loading: true };
+    this.state = {country: {label: "Jordan", code: "jo"}, forecasts: [], loading: true };
   }
 
+  handleClick(country) {
+    if(country) {
+      this.setState({country: country});
+      this.populateData(country);
+    }
+
+  }
+  
   componentDidMount() {
-    this.populateWeatherData();
+    this.populateData(this.state.country);
   }
 
-  static renderForecastsTable(forecasts) {
+  renderForecastsTable(forecasts) {
     return (
-      <table className='table table-striped' aria-labelledby="tabelLabel">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Temp. (C)</th>
-            <th>Temp. (F)</th>
-            <th>Summary</th>
-          </tr>
-        </thead>
-        <tbody>
-          {forecasts.map(forecast =>
-            <tr key={forecast.date}>
-              <td>{forecast.date}</td>
-              <td>{forecast.temperatureC}</td>
-              <td>{forecast.temperatureF}</td>
-              <td>{forecast.summary}</td>
+      <div>
+        <CountrySelect onChange={(country) => this.handleClick(country)} />
+        <table className='table table-striped' aria-labelledby="tabelLabel">
+          <thead>
+            <tr>
+              <th>Update Date</th>
+              <th>Confirmed</th>
+              <th>Recovered</th>
+              <th>Deaths</th>
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {forecasts.map(forecast =>
+              <tr key={forecast.date}>
+                <td>{forecast.date}</td>
+                <td>{forecast.confirmed}</td>
+                <td>{forecast.recovered}</td>
+                <td>{forecast.deaths}</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     );
   }
 
   render() {
     let contents = this.state.loading
       ? <p><em>Loading...</em></p>
-      : FetchData.renderForecastsTable(this.state.forecasts);
+      : this.renderForecastsTable(this.state.forecasts);
 
     return (
       <div>
-        <h1 id="tabelLabel" >Weather forecast</h1>
-        <p>This component demonstrates fetching data from the server.</p>
+        <h1 id="tabelLabel" >            
+          <ReactCountryFlag
+                countryCode={this.state.country.code}
+                svg
+                style={{
+                    width: '2em',
+                    height: '2em',
+                }}
+                title={this.state.country.label}
+            />
+            &nbsp;
+            {this.state.country.label}</h1>
+        <p>Latest incoming reports (updated hourly)</p>
         {contents}
       </div>
     );
   }
 
-  async populateWeatherData() {
-    const response = await fetch('weatherforecast');
+  async populateData(country) {
+
+    const response = await fetch("StatReport"+"/"+country.label, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
     const data = await response.json();
     this.setState({ forecasts: data, loading: false });
   }
 }
+
+export default FetchData;

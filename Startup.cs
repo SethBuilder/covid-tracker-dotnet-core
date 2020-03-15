@@ -54,7 +54,7 @@ namespace dg
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
+                    pattern: "{controller}/{action=Index}/{country?}");
             });
 
             app.UseSpa(spa =>
