@@ -17,4 +17,4 @@ FROM mcr.microsoft.com/dotnet/core/runtime
 WORKDIR /app
 EXPOSE 80
 COPY --from=build-env /app/out .
-ENTRYPOINT ["dotnet", "aspnetapp.dll"]
+ENTRYPOINT ["dotnet", "dg.dll"]
