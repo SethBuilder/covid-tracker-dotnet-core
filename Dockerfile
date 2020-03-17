@@ -4,8 +4,10 @@ WORKDIR /app
 # Copy csproj and restore as distinct layers
 COPY *.csproj ./
 RUN dotnet restore
-RUN curl -sL https://deb.nodesource.com/setup_7.x | bash
-RUN apt-get install -y nodejs
+RUN apt-get update
+RUN apt-get -y install curl gnupg
+RUN curl -sL https://deb.nodesource.com/setup_11.x  | bash -
+RUN apt-get -y install nodejs
 # Copy everything else and build
 COPY . ./
 RUN dotnet publish -c Release -o out
