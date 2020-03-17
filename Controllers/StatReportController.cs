@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using dg.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using System;
 
 namespace dg.Controllers
 {
@@ -23,10 +24,10 @@ namespace dg.Controllers
         }
 
         // [Authorize]
-        [HttpGet("{country}")]
-        public Task<IEnumerable<StatReport>> GetAsync(string country)
+        [HttpGet]
+        public Task<StatReport> GetAsync([FromQuery]string selectedCountry, [FromQuery]string selectedCountryCode, [FromQuery]string ip)
         {
-            return _statsService.GetAsync(country);
+            return _statsService.GetAsync(selectedCountry, selectedCountryCode, ip);
         }
     }
 }

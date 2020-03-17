@@ -1,24 +1,36 @@
 import React, { Component } from 'react';
 import ReactCountryFlag from "react-country-flag"
 import CountrySelect from "./CountrySelect";
+import FooterPage from "./FooterPage";
+import publicIp from 'public-ip';
+
 export class FetchData extends Component {
   static displayName = FetchData.name;
 
   constructor(props) {
     super(props);
-    this.state = {country: {label: "Jordan", code: "jo"}, forecasts: [], loading: true };
+    this.state = {
+      forecasts: {
+        country:
+        {
+          code: "",
+          label: ""
+        }
+      }, loading: true
+    };
+
   }
 
   handleClick(country) {
-    if(country) {
-      this.setState({country: country});
+    if (country) {
+      this.setState({ country: country });
       this.populateData(country);
     }
 
   }
-  
+
   componentDidMount() {
-    this.populateData(this.state.country);
+    this.populateData(this.state.forecasts.country);
   }
 
   renderForecastsTable(forecasts) {
@@ -28,21 +40,21 @@ export class FetchData extends Component {
         <table className='table table-striped' aria-labelledby="tabelLabel">
           <thead>
             <tr>
-              <th>Update Date</th>
+              <th>Last Checked</th>
               <th>Confirmed</th>
               <th>Recovered</th>
               <th>Deaths</th>
             </tr>
           </thead>
           <tbody>
-            {forecasts.map(forecast =>
-              <tr key={forecast.date}>
-                <td>{forecast.date}</td>
-                <td>{forecast.confirmed}</td>
-                <td>{forecast.recovered}</td>
-                <td>{forecast.deaths}</td>
-              </tr>
-            )}
+            {/* {forecasts.map(forecast => */}
+            <tr key={forecasts.lastUpdate}>
+              <td>{forecasts.lastUpdate}</td>
+              <td>{forecasts.confirmed}</td>
+              <td>{forecasts.recovered}</td>
+              <td>{forecasts.deaths}</td>
+            </tr>
+            {/* )} */}
           </tbody>
         </table>
       </div>
@@ -56,27 +68,28 @@ export class FetchData extends Component {
 
     return (
       <div>
-        <h1 id="tabelLabel" >            
+        <h1 id="tabelLabel" >
           <ReactCountryFlag
-                countryCode={this.state.country.code}
-                svg
-                style={{
-                    width: '2em',
-                    height: '2em',
-                }}
-                title={this.state.country.label}
-            />
+            countryCode={this.state.forecasts.country.code}
+            svg
+            style={{
+              width: '2em',
+              height: '2em',
+            }}
+            title={this.state.forecasts.country.label}
+          />
             &nbsp;
-            {this.state.country.label}</h1>
-        <p>Latest incoming reports (updated hourly)</p>
+            {this.state.forecasts.country.label}</h1>
+        <p>Latest incoming data (updated hourly)</p>
         {contents}
+        <FooterPage />
       </div>
     );
   }
 
-  async populateData(country) {
-
-    const response = await fetch("StatReport"+"/"+country.label, {
+  async populateData(country = { code: "", label: "" }) {
+    let response = {};
+    response = await fetch("StatReport?" + "selectedCountry=" + country.label+"&selectedCountryCode="+country.code + "&" + "ip=" + await publicIp.v4(), {
       headers: {
         'Content-Type': 'application/json'
       },

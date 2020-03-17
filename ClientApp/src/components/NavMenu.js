@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import { Collapse, Container, Navbar, NavbarToggler, NavItem } from 'reactstrap';
+
 import './NavMenu.css';
 
 export class NavMenu extends Component {
@@ -26,12 +26,12 @@ export class NavMenu extends Component {
       <header>
         <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" light>
           <Container>
-            <NavbarBrand tag={Link} to="/">COVID-19 Stats</NavbarBrand>
+            <a className="navbar-brand" href="/">COVID-19 Stats</a>
             <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
             <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
               <ul className="navbar-nav flex-grow">
                 <NavItem>
-                  <a className="text-dark" href="https://seif.rocks">GitHub</a>
+                  <a className="text-dark" href="https://seif.rocks">Fork On GitHub</a>
                 </NavItem>
                 {/* <NavItem>
                   <NavLink tag={Link} className="text-dark" to="/counter">Counter</NavLink>

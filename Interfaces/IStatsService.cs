@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace dg.Interfaces
 {
     public interface IStatsService
     {
-        System.Threading.Tasks.Task<IEnumerable<StatReport>> GetAsync(string country);
+        Task<StatReport> GetAsync(string selectedCountry, string selectedCountryCode, string ip);
     }
 }
