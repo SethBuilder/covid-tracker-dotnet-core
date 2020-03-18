@@ -3,6 +3,7 @@ WORKDIR /app
 
 # Copy csproj and restore as distinct layers
 COPY *.csproj ./
+RUN sudo snap alias dotnet-sdk.dotnet dotnet
 RUN dotnet restore
 RUN apt-get update
 RUN apt-get -y install curl gnupg
