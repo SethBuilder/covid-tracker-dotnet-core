@@ -3,6 +3,9 @@ WORKDIR /app
 
 # Copy csproj and restore as distinct layers
 COPY *.csproj ./
+ENV container docker
+RUN apt-get update
+RUN apt-get install -y snapd squashfuse
 RUN snap alias dotnet-sdk.dotnet dotnet
 RUN dotnet restore
 RUN apt-get update
