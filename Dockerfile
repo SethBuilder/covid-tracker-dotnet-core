@@ -18,4 +18,4 @@ WORKDIR /app
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://*:8080
 COPY --from=build-env /app/out .
-ENTRYPOINT ["dotnet", "bin\Debug\netcoreapp3.1\dg.dll"]
+ENTRYPOINT ["dotnet", "bin\Release\netcoreapp3.1\"]
